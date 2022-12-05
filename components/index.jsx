@@ -1,14 +1,7 @@
-export { default as PostCardLocked } from './PostCardLocked';
-export { default as PostCard } from './PostCard';
-export { default as Categories } from './Categories';
-export { default as PostWidget } from './PostWidget';
 export { default as HomeHeader } from './HomeHeader';
 export { default as Header } from './Header';
 export { default as Layout } from './Layout';
-export { default as Author } from './Author';
-export { default as Comments } from './Comments';
-export { default as CommentsForm } from './CommentsForm';
-export { default as PostDetail } from './PostDetail';
 export { default as LoginLogout } from './LoginLogout';
 export { default as ProfileDetails } from './ProfileDetails';
 export { default as PokemonForm } from './PokemonForm';
+export { default as Pokemon } from './Pokemon';

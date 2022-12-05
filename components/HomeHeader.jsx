@@ -6,12 +6,12 @@ import LoginLogout from './LoginLogout';
 import Image from 'next/image';
 
 const HomeHeader = () => {
-    const [categories, setCategories] = useState([]);
-    useEffect(() => {
-        getCategories().then((newCategories) => {
-            setCategories(newCategories);
-        });
-    }, []);
+    // const [categories, setCategories] = useState([]);
+    // useEffect(() => {
+    //     getCategories().then((newCategories) => {
+    //         setCategories(newCategories);
+    //     });
+    // }, []);
     // grabs user data
     const { user, error, isLoading } = useUser();
 

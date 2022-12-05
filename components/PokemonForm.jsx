@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { addPokemon } from '../contexts/PokemonContext';
+import Pokemon from './Pokemon';
 
 const PokemonForm = ({ slug }) => {
     const [error, setError] = useState(false);
@@ -17,23 +19,9 @@ const PokemonForm = ({ slug }) => {
     // grabbing select data
     const [selectType, setSelectType] = useState();
     const [selectGender, setSelectGender] = useState();
-    const handlePokemonSubmit = () => {
-        setError(false);
-
-        if (!selectType() || nameEl.current.value || selectGender()) {
-            setError(true);
-            return;
-        }
-        const { value: storeData } = storeDateEl.current;
-
-        const pokemonObj = {
-            name: nameEl,
-            gender: selectGender(),
-            type: selectType()
-        };
-        if (storeData) {
-            localStorage.setItem('name', nameEl);
-        }
+    const handlePokemonSubmit = (e) => {
+        e.preventDefault();
+        addPokemon(nameEl, typeEl);
     };
 
     return (
@@ -52,7 +40,7 @@ const PokemonForm = ({ slug }) => {
                             name="name"
                         />
                     </div>
-                    <div className="flex no wrap ">
+                    {/* <div className="flex no wrap ">
                         <h1 className="text-2xl">Gender:</h1>
                         <select
                             value={selectGender}
@@ -96,15 +84,26 @@ const PokemonForm = ({ slug }) => {
                             <option>Steel</option>
                             <option>Fairy</option>
                         </select>
+                    </div> */}
+                    <Pokemon />
+                    <div className="flex no wrap">
+                        <h1 className="text-2xl">Type:</h1>
+                        <input
+                            className="px-4 outline-none w-full rounded-none hover:bg-yellow-400"
+                            type="text"
+                            ref={typeEl}
+                            placeholder="Type"
+                            name="type"
+                        />
                     </div>
                 </div>
-                <div>
+                {/* <div>
                     <h1 className="text-2xl pb-1">Image</h1>
                     <input type="file" className="hover:bg-yellow-400 p-2" />
                     <p>
                         <img id="output" className="" />
                     </p>
-                </div>
+                </div> */}
                 {error && <p>ALL FIELDS REQUIRED</p>}
                 <button
                     ref={storeDataEl}
@@ -112,7 +111,7 @@ const PokemonForm = ({ slug }) => {
                     name="storeData"
                     value="true"
                     type="button"
-                    onClick={handlePokemonSubmit}
+                    onSubmit={handlePokemonSubmit}
                     className="hover:bg-yellow-400 p-2 text-2xl cursor-pointer"
                 >
                     Submit Pokemon

@@ -1,9 +1,17 @@
 import Head from 'next/head';
 import { useUser } from '@auth0/nextjs-auth0';
-import { PostCard, ProfileDetails, Header } from '../components';
-import { getPosts } from '../services';
+import { Header } from '../../components';
+// export const getStaticProps = async () => {
+//     const res = await fetch('https://pokeapi.co/api/v2/pokemon');
+//     const data = await res.json();
 
-export default function Profile({ posts }) {
+//     return {
+//         props: { pokemons: data }
+//     };
+// };
+
+export default function Profile({ pokemons }) {
+    console.log(pokemons);
     // grabs user data
     const { user, error, isLoading } = useUser({});
     console.log(user);
@@ -27,22 +35,16 @@ export default function Profile({ posts }) {
 
             <div>
                 <h1 className="text-left text-white my-8 text-3xl font-semibold">
-                    {user && user.given_name}'s Pokémons
+                    {user && user.given_name}'s Pokémon
                 </h1>
             </div>
-            <div className="grid grid-cols-3 mb-18">
-                {posts.map((post) => (
-                    <PostCard post={post.node} key={post.title} />
-                ))}
-            </div>
+            {/* {pokemons.map((pokemon) => (
+                <div key={pokemon.id}>
+                    <a>
+                        <h3>{pokemon.name}</h3>
+                    </a>
+                </div>
+            ))} */}
         </div>
     );
-}
-
-export async function getStaticProps() {
-    const posts = (await getPosts()) || [];
-
-    return {
-        props: { posts }
-    };
 }

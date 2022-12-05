@@ -1,17 +1,13 @@
-import { useUser } from '@auth0/nextjs-auth0';
-import { getPosts } from '../services';
-import {
-    HomeHeader,
-    PostCard,
-    PostWidget,
-    Categories,
-    PostCardLocked
-} from '../components';
+import { getServerSidePropsWrapper, useUser } from '@auth0/nextjs-auth0';
+import { HomeHeader, Pokemon } from '../components';
+import { table, minifyRecords, getMinifiedRecord } from './api/utils/';
 import Head from 'next/head';
 
-export default function Home({ posts }) {
+export default function Home({ initialPokemons }) {
+    console.log(initialPokemons[0]);
     // grabs user data
     const { user, error, isLoading } = useUser();
+
     return (
         <div className="container mx-auto px-10 mb-8">
             <Head>
@@ -20,41 +16,31 @@ export default function Home({ posts }) {
             </Head>
             <HomeHeader />
             <div>
-                <h1 className="text-center text-white mb-8 mt-8  text-3xl font-semibold">
-                    Community Creations
-                </h1>
-                <div>
-                    {user ? (
-                        <div className="grid grid-cols-3 mb-18">
-                            {posts.map((post) => (
-                                <PostCard post={post.node} key={post.title} />
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="grid grid-cols-3 mb-18">
-                            {posts.map((post) => (
-                                <PostCardLocked
-                                    post={post.node}
-                                    key={post.title}
-                                />
-                            ))}
-                        </div>
-                    )}
-                </div>
-                {/* <div className="lg:col-span-4 col-span-1">
-                    <div className="lg:sticky relative top-8">
-                        <PostWidget />
-                        <Categories />
-                    </div>
-                </div> */}
+                {initialPokemons.map((pokemon) => {
+                    <p className="text-4xl">
+                        <Pokemon key={pokemon.id} pokemon={pokemon} />
+                    </p>;
+                })}
+                <p>hello</p>
             </div>
         </div>
     );
 }
-export async function getStaticProps() {
-    const posts = (await getPosts()) || [];
 
-    return {
-        props: { posts }
-    };
+export async function getServerSideProps(context) {
+    try {
+        const pokemon = await table.select({}).firstPage();
+        return {
+            props: {
+                initialPokemons: minifyRecords(pokemon)
+            }
+        };
+    } catch (err) {
+        console.error(err);
+        return {
+            props: {
+                err: 'something wrong'
+            }
+        };
+    }
 }
