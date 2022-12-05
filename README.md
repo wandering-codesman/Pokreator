@@ -25,3 +25,5 @@ pnpm create next-app --example with-tailwindcss with-tailwindcss-app
 ```
 
 Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+
+npm i @auth0/nextjs-auth0 @tailwindcss/aspect-ratio airtable html-react-parser moment next nodemon react react-dom react-icons react-multi-carousel sass sqlite3 tailwindscss
