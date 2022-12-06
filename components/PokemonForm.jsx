@@ -1,27 +1,35 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import { addPokemon } from '../contexts/PokemonContext';
 import Pokemon from './Pokemon';
+import { PokemonContext } from '../contexts/PokemonContext';
 
-const PokemonForm = ({ slug }) => {
+const PokemonForm = ({ pokemon }) => {
+    const { updatePokemon, deletePokemon } = useContext(PokemonContext);
     const [error, setError] = useState(false);
-    // fetch data
-    const [localStorage, setLocalStorage] = useState(null);
     // if pokemon is created
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
-    // grabbing uploaded image data
-    const fileSelectedHandler = (e) => {
-        console.log(e.target.files[0]);
-    };
+    // // grabbing uploaded image data
+    // const fileSelectedHandler = (e) => {
+    //     console.log(e.target.files[0]);
+    // };
+
     // grabbing user input data
     const nameEl = useRef();
     const typeEl = useRef();
     const storeDataEl = useRef();
-    // grabbing select data
-    const [selectType, setSelectType] = useState();
-    const [selectGender, setSelectGender] = useState();
+    // // grabbing select data
+    // const [selectType, setSelectType] = useState();
+    // const [selectGender, setSelectGender] = useState();
+
     const handlePokemonSubmit = (e) => {
         e.preventDefault();
-        addPokemon(nameEl, typeEl);
+        const updatedFields = {
+            ...pokemon.fields,
+            completed: !pokemon.fields.completed
+        };
+
+        const updatedPokemon = { id: pokemon.id, fields: updatedFields };
+        updatePokemon(updatedPokemon);
     };
 
     return (

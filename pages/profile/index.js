@@ -1,6 +1,10 @@
 import Head from 'next/head';
+import { PokemonContext } from '../../contexts/PokemonContext';
 import { useUser } from '@auth0/nextjs-auth0';
 import { Header } from '../../components';
+import { table, minifyRecords, getMinifiedRecord } from '../api/utils/';
+import { useEffect, useContext } from 'react';
+
 // export const getStaticProps = async () => {
 //     const res = await fetch('https://pokeapi.co/api/v2/pokemon');
 //     const data = await res.json();
@@ -10,11 +14,28 @@ import { Header } from '../../components';
 //     };
 // };
 
-export default function Profile({ pokemons }) {
-    console.log(pokemons);
+export default function Profile({ initialPokemons }) {
+    const { pokemons, setPokemons } = useContext(PokemonContext);
+
+    const { updatePokemon, deletePokemon } = useContext(PokemonContext);
+    const handlePokemonSubmit = (e) => {
+        e.preventDefault();
+        const updatedFields = {
+            ...pokemon.fields,
+            completed: !pokemon.fields.completed
+        };
+
+        const updatedPokemon = { id: pokemon.id, fields: updatedFields };
+        updatePokemon(updatedPokemon);
+    };
+
     // grabs user data
     const { user, error, isLoading } = useUser({});
     console.log(user);
+    useEffect(() => {
+        setPokemons(initialPokemons);
+    }, []);
+
     return (
         <div className="container mx-auto px-10 mb-8">
             <Head>
@@ -34,17 +55,44 @@ export default function Profile({ pokemons }) {
             </div>
 
             <div>
-                <h1 className="text-left text-white my-8 text-3xl font-semibold">
+                <h1 className="text-left text-white mt-8 text-3xl font-semibold">
                     {user && user.given_name}'s Pokémon
                 </h1>
             </div>
-            {/* {pokemons.map((pokemon) => (
-                <div key={pokemon.id}>
-                    <a>
-                        <h3>{pokemon.name}</h3>
-                    </a>
-                </div>
-            ))} */}
+            <div>
+                {pokemons &&
+                    pokemons.map((pokemon) => (
+                        <>
+                            <h1
+                                key={pokemon.id}
+                                className="text-2xl inline-flex mt-2 px-2 mx-2 bg-white hover:bg-yellow-400"
+                            >
+                                {pokemon.fields.name}
+                            </h1>
+                            <button onClick={() => deletePokemon(pokemon.id)}>
+                                Delete
+                            </button>
+                        </>
+                    ))}
+            </div>
         </div>
     );
+}
+
+export async function getServerSideProps(context) {
+    try {
+        const pokemon = await table.select({}).firstPage();
+        return {
+            props: {
+                initialPokemons: minifyRecords(pokemon)
+            }
+        };
+    } catch (err) {
+        console.error(err);
+        return {
+            props: {
+                err: 'something wrong'
+            }
+        };
+    }
 }

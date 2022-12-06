@@ -4,7 +4,11 @@ import { table, minifyRecords, getMinifiedRecord } from './api/utils/';
 import Head from 'next/head';
 
 export default function Home({ initialPokemons }) {
-    console.log(initialPokemons[0]);
+    console.log(initialPokemons[0].fields.name);
+    // for (let i of initialPokemons) {
+    //     console.log(i);
+    // }
+
     // grabs user data
     const { user, error, isLoading } = useUser();
 
@@ -15,14 +19,6 @@ export default function Home({ initialPokemons }) {
                 <link rel="icon" href="/favicon.ico" />
             </Head>
             <HomeHeader />
-            <div>
-                {initialPokemons.map((pokemon) => {
-                    <p className="text-4xl">
-                        <Pokemon key={pokemon.id} pokemon={pokemon} />
-                    </p>;
-                })}
-                <p>hello</p>
-            </div>
         </div>
     );
 }

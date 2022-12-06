@@ -14,6 +14,7 @@ export default async (req, res) => {
         console.error(err);
     }
 };
+
 // const method = req.method;
 // let result;
 // switch (method) {
@@ -21,7 +22,7 @@ export default async (req, res) => {
 //         try {
 //             const updatedRecords = await table.update({
 //                 recordId,
-//                 Name
+//                 name
 //             });
 //             res.status(200);
 //             res.json(getMinifiedRecord(updatedRecords[0]));
